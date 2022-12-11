@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Toy XKS Endpoint
+
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 128
+
+Resources:
+  LambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: toyxks
+      Runtime: provided.al2
+      Policies:
+        - AWSLambdaExecute
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DDBTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref DDBTable
+      Architectures:
+        - x86_64
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: /{item+}
+            Method: ANY
+            RestApiId: !Ref ApiDeployment
+    Metadata:
+      BuildMethod: makefile
+  
+  ApiDeployment:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: v1
+
+  DDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: toyxkstable
+      AttributeDefinitions:
+        - AttributeName: externalkeyid
+          AttributeType: S
+      KeySchema:
+        - AttributeName: externalkeyid
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+Outputs:
+
+  ProxyURIEndpoint:
+    Description: "The value for the Proxy URI Endpoint"
+    Value: !Sub "https://${ApiDeployment}.execute-api.${AWS::Region}.amazonaws.com"
+
+  ProxyURIPathPrefix:
+    Description: "The value for the Proxy URI Path Prefix (enter only /v1)"
+    Value: !Sub "/v1/kms/xks/v1"
+
+  ProxyCredentialAccessKeyID:
+    Description: "The value for the Proxy Credential: Access Key ID"
+    Value: !Sub "BETWEEN2TENAND3TENCHARACTERS"
+
+  ProxyCredentialSecretAccessKey:
+    Description: "The value for the Proxy Credential: Secret Access Key"
+    Value: !Sub "PleaseReplaceThisWithSomeSecretOfLength43To64"
