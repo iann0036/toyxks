@@ -46,3 +46,7 @@ externalkeyid (S) | secret (S)
 anystring         | asecretvaluethatisexactly32long!
 
 Ensure the secret value is exactly length 32.
+
+## Cleanup
+
+Delete the stack to remove the API Gateway, Lambda and DynamoDB components. Disable, then schedule for deletion any CMKs created during your testing. Once the CMKs are deleted (takes 7+ days), you can disconnect and delete the external trust store from the KMS console.
