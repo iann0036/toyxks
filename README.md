@@ -1,6 +1,6 @@
 # toyxks
 
-> Basic (toy) External Key Store for AWS KMS
+> Basic (toy) [External Key Store](https://docs.aws.amazon.com/kms/latest/developerguide/keystore-external.html) for AWS KMS
 
 Obviously don't use this anywhere near production.
 
