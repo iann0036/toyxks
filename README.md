@@ -2,6 +2,8 @@
 
 > Basic (toy) [External Key Store](https://docs.aws.amazon.com/kms/latest/developerguide/keystore-external.html) for AWS KMS
 
+![](assets/toyxks.drawio.png)
+
 Obviously don't use this anywhere near production.
 
 ## Installation
